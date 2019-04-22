@@ -106,7 +106,6 @@ import time
 import unittest
 from xml.sax import saxutils
 
-
 # ------------------------------------------------------------------------
 # The redirectors below are used to capture output during testing. Output
 # sent to sys.stdout and sys.stderr are automatically captured. However
@@ -132,9 +131,9 @@ class OutputRedirector(object):
     def flush(self):
         self.fp.flush()
 
+
 stdout_redirector = OutputRedirector(sys.stdout)
 stderr_redirector = OutputRedirector(sys.stderr)
-
 
 # ----------------------------------------------------------------------
 # Template
@@ -530,8 +529,7 @@ class Template_mixin(object):
         %(status)s</a>
 
     <div id='div_%(tid)s' class="popup_window">
-        <pre>
-        %(script)s
+        <pre>%(script)s
         </pre>
     </div>
     <!--css div popup end-->
@@ -559,7 +557,6 @@ class Template_mixin(object):
 
 
 TestResult = unittest.TestResult
-
 
 class _TestResult(TestResult):
     # note: _TestResult is a pure representation of results.
@@ -853,17 +850,15 @@ class HTMLTestRunner(Template_mixin):
         desc = doc and ('%s: %s' % (name, doc)) or name
         tmpl = has_output and self.REPORT_TEST_WITH_OUTPUT_TMPL or self.REPORT_TEST_NO_OUTPUT_TMPL
 
-        script = self.REPORT_TEST_OUTPUT_TMPL % dict(
-            id=tid,
-            output=saxutils.escape(o+e),
-        )
-
+        # script = self.REPORT_TEST_OUTPUT_TMPL % dict(
+        #     id=tid,
+        # )
         row = tmpl % dict(
             tid=tid,
             Class=(n == 0 and 'hiddenRow' or 'none'),
             style=(n == 2 and 'errorCase' or (n == 1 and 'failCase' or 'none')),
             desc=desc,
-            script=script,
+            script=saxutils.escape((o+e).strip()),
             status=self.STATUS[n],
         )
         rows.append(row)
